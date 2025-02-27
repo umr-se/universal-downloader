@@ -1,0 +1,4 @@
+*.py linguist-detectable=true
+*.md linguist-documentation
+*.json linguist-vendored
+templates/* linguist-vendored
