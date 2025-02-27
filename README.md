@@ -28,7 +28,7 @@ Universal Downloader is a powerful tool that simplifies downloading videos, shor
 Make sure you have the following installed:
 - Python 3.x
 - Flask
-- yt-dlp (for YouTube downloads)
+- yt-dlp
 - Requests
 
 ### Installation
@@ -47,13 +47,21 @@ Make sure you have the following installed:
    ```
 4. Open the frontend in your browser and start downloading!
 
+### Backend & Frontend
+
+![img0](https://github.com/user-attachments/assets/c4816543-aced-48a7-80d3-7bf21110b992)
+![img1](https://github.com/user-attachments/assets/afcefcb7-7d60-4da2-8344-95623df79707)
+
+
 ## 📢 Feedback & Contributions
 I'm always open to feedback and contributions to improve this project! Feel free to open an issue or submit a pull request.
 
-📩 Reach out to me at [your-email@example.com](mailto:your-email@example.com)
+📩 Reach out to me at [umersalim42@gmail.com](mailto:umersalim42@gmail.com)
 
 ⭐ If you find this project useful, don't forget to star this repository!
 
 ---
 
 Made with ❤️ by me
+
+
