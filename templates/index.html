@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Download videos easily from YouTube and other platforms using this video downloader.">
+    <meta name="robots" content="index, follow">
+    <title>Video Downloader</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+        .container {
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            overflow: hidden;
+        }
+        input[type="url"] {
+            width: 70%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-size: 16px;
+            text-align: center;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        select {
+            height: 45px;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-size: 16px;
+            text-align: center;
+            display: block;
+            box-sizing: border-box;
+        }
+        select {
+            width: 25%;
+            margin-left: 10px;
+        }
+        .input-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        button {
+            padding: 12px 20px;
+            border: none;
+            background: #007bff;
+            color: #fff;
+            border-radius: 12px;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+            max-width: 300px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .details {
+            margin-top: 20px;
+            text-align: left;
+        }
+        .thumbnail-container {
+            width: 100%;
+            max-width: 300px;
+            height: 200px;
+            margin: 10px auto;
+            position: relative;
+        }
+        .thumbnail {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+        .details h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .details p {
+            font-size: 16px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .details button {
+            padding: 12px 20px;
+            border: none;
+            background: #28a745;
+            color: white;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            margin: 0 auto;
+            max-width: 300px;
+        }
+        .details button:hover {
+            background: #218838;
+        }
+        #upload-date {
+            font-size: 16px;
+            color: #888;
+            position: relative;
+            left: 20px;
+        }
+        #video-quality {
+            position: relative;
+            left: 130px;
+        }
+        .loader {
+            display: none;
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #007bff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .button-label-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .button-label {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 300px;
+            height: 46px;
+            font-size: 16px;
+            color: #fff;
+            border-radius: 12px;
+            background-color: #6c757d;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Universal Downloader !!</h1>
+        <form id="video-form">
+            <div class="input-group">
+                <input type="url" id="video-url" placeholder="Enter video URL" required autocomplete="off">
+            </div>
+            <button type="submit" id="fetch-details-btn">Fetch Video Details</button>
+            <div class="loader" id="loader"></div>
+        </form>
+        <div class="details" id="details" style="display: none;">
+            <h2 id="video-title"></h2>
+            <h3 id="upload-date"></h3>
+            <div class="thumbnail-container">
+                <img id="video-thumbnail" class="thumbnail" alt="Video Thumbnail">
+            </div>
+            <div id="progress" style="display: none; margin-top: 20px;">
+                <p id="progress-text" style="text-align: center;">Processing, please wait...</p>
+                <div style="width: 80%; height: 10px; background: #ddd; margin: 0 auto; border-radius: 5px; overflow: hidden;">
+                    <div id="progress-bar" style="width: 0%; height: 100%; background: #007bff; transition: width 0.2s;"></div>
+                </div>
+            </div><br>
+            <table style=" border-spacing: 5px; text-align: left;">
+                <tr>
+                    <td>
+                        <div class="button-label" style="background-color: white; color: black; margin-left: 10px;">720p Video</div>
+                    </td>
+                    <td>
+                        <button id="download-btn">Download Video</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="button-label" style="background-color: white; color: black; margin-left: 10px;">480p Video</div>
+                    </td>
+                    <td>
+                        <button id="extract-btn">Download Video</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="button-label" style="background-color: white; color: black; margin-left: 10px;">128 kbps</div>
+                    </td>
+                    <td>
+                        <button id="download-audio-btn">Download Audio</button>
+                    </td>
+                </tr>
+            </table>
+            
+        </div>        
+        </div>
+    </div>
+    <script>
+        const form = document.getElementById("video-form");
+        const detailsDiv = document.getElementById("details");
+        const videoTitle = document.getElementById("video-title");
+        const videoThumbnail = document.getElementById("video-thumbnail");
+        //const videoQuality = document.getElementById("video-quality");
+        const uploadDate = document.getElementById("upload-date");
+        const progressDiv = document.getElementById("progress");
+        const progressBar = document.getElementById("progress-bar");
+        const progressText = document.getElementById("progress-text");
+        const eventSource = new EventSource("/stream");
+    
+        eventSource.onmessage = (event) => {
+            const progress = JSON.parse(event.data); // Parse the incoming event data
+        
+            if (progress.percentage !== undefined) {
+                // Ensure the progress bar width only increases
+                if (parseFloat(progressBar.style.width) < progress.percentage * 100) {
+                    // Update the progress bar width only if it's increasing
+                    progressBar.style.width = `${progress.percentage * 100}%`;
+                }
+        
+                // Update progress text
+                progressText.textContent = `Downloaded ${Math.round(progress.percentage * 100)}% (${Math.round(progress.downloaded_bytes / 1e6)} MB of ${Math.round(progress.total_bytes / 1e6)} MB)`;
+        
+                // If download is finished, show completion message
+                if (progress.percentage >= 1) {
+                    progressText.textContent = "Download Completed!";
+                }
+            }
+        };
+        
+    
+        eventSource.onerror = (error) => {
+            console.error("Error with EventSource:", error);
+        };
+    
+        const downloadBtn = document.getElementById("download-btn");
+    
+        let downloadedVideoTitle = "";
+    
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+        
+            const fetchButton = document.getElementById("fetch-details-btn");
+            const loader = document.getElementById("loader");
+            
+            // Hide the button and show the loader
+            fetchButton.style.display = "none";
+            loader.style.display = "block";
+        
+            progressDiv.style.display = "none"; // Hide the progress bar initially
+            progressBar.style.width = "0%"; // Ensure progress bar is reset
+            progressText.textContent = ""; // Clear any previous progress text
+            const videoUrl = document.getElementById("video-url").value;
+        
+            try {
+                const response = await fetch("/video_details", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: `video_url=${encodeURIComponent(videoUrl)}`
+                });
+        
+                if (!response.ok) throw new Error("Failed to fetch video details");
+        
+                const data = await response.json();
+                downloadedVideoTitle = data.title.replace(/[/\\?%*:|"<>]/g, "");
+        
+                videoTitle.textContent = data.title || "Untitled Video";
+                uploadDate.textContent = `Uploaded on: ${data.date || "Unknown Date"}`;
+                videoThumbnail.src = data.thumbnail || "default-thumbnail.jpg";
+                //videoQuality.textContent = data.quality || "Unknown";
+                detailsDiv.style.display = "block";
+        
+            } catch (error) {
+                alert("Error: " + error.message);
+            } finally {
+                // Show the button and hide the loader
+                fetchButton.style.display = "block";
+                loader.style.display = "none";
+            }
+        });
+        
+    
+        downloadBtn.addEventListener("click", async () => {
+            progressDiv.style.display = "block"; // Show progress bar when download starts
+            progressBar.style.width = "0%"; // Reset progress bar initially
+            progressText.textContent = "Starting download..."; // Initial message
+        
+            let downloadComplete = false; // Track if the download has been completed
+        
+            try {
+                const videoUrl = document.getElementById("video-url").value;
+                
+                // Set quality to "bv*+ba/b" for 720p video
+                const selectedQuality = "bv*+ba/b"; // Fixed quality for 720p
+        
+                // Start downloading the video
+                const downloadResponse = await fetch("/download", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: `video_url=${encodeURIComponent(videoUrl)}&quality=${encodeURIComponent(selectedQuality)}`
+                });
+        
+                if (!downloadResponse.ok) throw new Error("Failed to download video");
+        
+                // Convert response to a downloadable file
+                const blob = await downloadResponse.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.style.display = "none";
+                a.href = url;
+                a.download = downloadedVideoTitle || "video";
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+        
+                // Reset progress bar to 0% when download starts
+                progressBar.style.width = "0%"; // Reset progress bar
+                progressText.textContent = "Waiting to download"; // Set progress text to "Waiting to download"
+        
+                // Mark the download as complete
+                downloadComplete = true;
+        
+                // Fill the progress bar to 100% and ensure it stays there
+                progressBar.style.width = "100%"; // Set progress bar to 100%
+                progressText.textContent = "Download Completed!"; // Set final progress text
+        
+                // Hide the progress bar when the file starts downloading
+                progressDiv.style.display = "none";
+        
+                // Clean up after download
+                await fetch("/cleanup", { method: "POST" });
+        
+            } catch (error) {
+                alert("Error: " + error.message);
+            } finally {
+                if (downloadComplete) {
+                    // Ensure progress bar stays at 100% and does not decrease
+                    progressBar.style.width = "100%"; 
+                }
+            }// Clear the input field and reset the button state
+        });
+        
+
+
+        const downloadAudioBtn = document.getElementById("download-audio-btn");
+
+        downloadAudioBtn.addEventListener("click", async () => {
+            progressDiv.style.display = "block"; // Show progress bar when download starts
+            progressBar.style.width = "0%"; // Reset progress bar initially
+            progressText.textContent = "Starting audio download..."; // Initial message
+        
+            try {
+                const videoUrl = document.getElementById("video-url").value;
+        
+                // Start downloading the audio
+                const downloadResponse = await fetch("/download", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: `video_url=${encodeURIComponent(videoUrl)}&type=audio&quality=bestaudio/best`
+                });
+        
+                if (!downloadResponse.ok) throw new Error("Failed to download audio");
+        
+                // Convert response to a downloadable file
+                const blob = await downloadResponse.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.style.display = "none";
+                a.href = url;
+                a.download = `${downloadedVideoTitle || "audio"}.mp3`;  // Set download file extension to .mp3
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+        
+                progressBar.style.width = "100%";
+                progressText.textContent = "Audio Download Completed!";
+                progressDiv.style.display = "none";
+                await fetch("/cleanup", { method: "POST" });
+            } catch (error) {
+                alert("Error: " + error.message);
+            }
+        });
+
+        const extractBtn = document.getElementById("extract-btn");
+
+        extractBtn.addEventListener("click", async () => {
+            progressDiv.style.display = "block"; // Show progress bar when download starts
+            progressBar.style.width = "0%"; // Reset progress bar initially
+            progressText.textContent = "Starting 480p video download..."; // Initial message
+            
+            try {
+                const videoUrl = document.getElementById("video-url").value;
+                
+                // Start downloading the 480p video (simulated by sending "best" quality)
+                const downloadResponse = await fetch("/download", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: `video_url=${encodeURIComponent(videoUrl)}&quality=worst`
+                });
+
+                if (!downloadResponse.ok) throw new Error("Failed to download video");
+
+                // Convert response to a downloadable file
+                const blob = await downloadResponse.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.style.display = "none";
+                a.href = url;
+                a.download = `${downloadedVideoTitle || "video"}_480p`;  // Append '_480p' to the file name
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+
+                // Update the progress bar to 100% when download is finished
+                progressBar.style.width = "100%"; // Set progress bar to 100%
+                progressText.textContent = "Download Completed!"; // Set final progress text
+                
+                // Hide the progress bar when the file starts downloading
+                progressDiv.style.display = "none";
+                
+                // Clean up after download
+                await fetch("/cleanup", { method: "POST" });
+
+            } catch (error) {
+                alert("Error: " + error.message);
+            }
+        });        
+    </script>
+</body>
+</html>
