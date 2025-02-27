@@ -56,4 +56,4 @@ I'm always open to feedback and contributions to improve this project! Feel free
 
 ---
 
-Made with ❤️ by [Your Name]
+Made with ❤️ by me
